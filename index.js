@@ -30,7 +30,7 @@ var date_util = {
 var doJobBytimegap = function(job,timegap){
     job();
     setTimeout(function(){
-        job();
+        doJobBytimegap(job,timegap);
     },timegap);
 
 };
@@ -39,7 +39,7 @@ var doJobEveryday = function(job){
     job();
     //and then do it every day
     setTimeout(function(){
-        job();
+        doJobEveryday(job)
     },ONE_DAY);
 
 };
@@ -51,7 +51,7 @@ var doJobEveryday = function(job){
  * @param job
  */
 var startJobEveryDay = function(targettime, job){
-    var timegap = targettime + ONE_DAY - date_util.getNowTimestamp();
+    var timegap = targettime - date_util.getNowTimestamp();
     setTimeout(function(){
         doJobEveryday(job);
     },timegap);
@@ -65,7 +65,9 @@ var startJobEveryTimegap = function(start_timestamp, timegap, job){
 };
 
 
-module.export = {
+module.exports = {
     startJobEveryDay:startJobEveryDay
     ,startJobEveryTimegap:startJobEveryTimegap
+    ,date_util:date_util
+    ,ONE_DAY:ONE_DAY
 };
