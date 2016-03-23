@@ -28,6 +28,7 @@ cronjob.startJobEveryDay(tomorrowtimestamp,job);
 * ONE_DAY:constant
 
 > date_util:
+
 * getToday():get today's 0 o'clock timestamp
 * getThisMonth(): get this month's first day's 0 o'clock timestamp
 * getNowTimestamp(): current timestamp
