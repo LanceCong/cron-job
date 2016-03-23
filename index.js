@@ -57,7 +57,7 @@ var startJobEveryDay = function(targettime, job){
     },timegap);
 };
 
-var startJobByTimegap = function(start_timestamp,timegap,job){
+var startJobEveryTimegap = function(start_timestamp, timegap, job){
     var timetogo = start_timestamp - date_util.getNowTimestamp();
     setTimeout(function(){
         doJobBytimegap(job,timegap);
@@ -67,5 +67,5 @@ var startJobByTimegap = function(start_timestamp,timegap,job){
 
 module.export = {
     startJobEveryDay:startJobEveryDay
-    ,startJobByTimegap:startJobByTimegap
+    ,startJobEveryTimegap:startJobEveryTimegap
 };
