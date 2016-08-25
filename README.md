@@ -8,26 +8,37 @@ node模块。功能是定时任务。cron job.Do something every day or at a spe
 
 var cronjob = require('cron-job');
 
-var job = function(){
-    console.log('do job...')
+var job = function(options){//only one parameters
+    console.log('do job...'+JSON.stringify(options))
 };
 
 //do it after 5s,and do it every 3s
-cronjob.startJobEveryTimegap(cronjob.date_util.getNowTimestamp()+5000,3000,job);
+var first_time = cronjob.date_util.getNowTimestamp()+5;//timestamp,unit is seconds
+var timegap = 3;//seconds
+var options = {//method's parameters
+    param1:'1'
+    param2:'2'
+};
 
-//do it at tomorrow's 0 o'clock,and do it every day
-var tomorrowtimestamp = cronjob.date_util.getToday()+cronjob.ONE_DAY;//
-cronjob.startJobEveryDay(tomorrowtimestamp,job);
+cronjob.startJobEveryTimegap(first_time+5,timegap,job,options);
 
+//do it at tomorrow's 0 o'clock,and do it every day.
+var tomorrowtimestamp = cronjob.date_util.getToday()+cronjob.ONE_DAY;//it must bigger than the current timestamp,unit is seconds
+var options = {//method's parameters
+    param1:'1'
+    param2:'2'
+};
+
+cronjob.startJobEveryDay(tomorrowtimestamp,job,options);
 
 ```
 
 # API
-* startJobEveryTimegap(start_timestamp, timegap, job)
-* startJobEveryDay(targettime, job)
-* ONE_DAY:constant
+* cron-job.startJobEveryTimegap(start_timestamp, timegap, job,options)
+* cron-job.startJobEveryDay(targettime,job,options)
+* cron-job.ONE_DAY:constant,24 * 60 * 60
 
-> date_util:
+> cron-job.date_util:
 
 * getToday():get today's 0 o'clock timestamp
 * getThisMonth(): get this month's first day's 0 o'clock timestamp

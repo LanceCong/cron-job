@@ -1,8 +1,8 @@
 /**
  * Created by lance on 16-3-21.
  */
-//定义常量
-const ONE_DAY = 24*60*60*1000;//one day.一天。
+//constant
+const ONE_DAY = 24*60*60;//one day.
 
 var date_util = {
     getToday:function(){
@@ -11,7 +11,7 @@ var date_util = {
         today.setMinutes(0);
         today.setSeconds(0);
         today.setMilliseconds(0);
-        return Math.floor(today.getTime());
+        return Math.floor(today.getTime()/1000);
     }
     ,getThisMonth:function(){
         var today = new Date();
@@ -20,50 +20,67 @@ var date_util = {
         today.setMinutes(0);
         today.setSeconds(0);
         today.setMilliseconds(0);
-        return Math.floor(today.getTime());
+        return Math.floor(today.getTime()/1000);
     }
     ,getNowTimestamp:function(){
-        return Math.floor(new Date().getTime());
+        return Math.floor(new Date().getTime()/1000);
     }
 };
 
-var doJobBytimegap = function(job,timegap){
-    job();
+/**
+ * do job every time gap
+ * @param job
+ * @param options method's params
+ * @param timegap unit:seconds
+ */
+var doJobBytimegap = function(job,options,timegap){
+    job(options);
     setTimeout(function(){
-        doJobBytimegap(job,timegap);
-    },timegap);
+        doJobBytimegap(job,options,timegap);
+    },timegap * 1000);
 
 };
 
-var doJobEveryday = function(job){
-    job();
-    //and then do it every day
+/**
+ * do job at specific time everyday
+ * @param job
+ * @param options
+ */
+var doJobEveryday = function(job,options){
+    job(options);
     setTimeout(function(){
-        doJobEveryday(job)
-    },ONE_DAY);
-
+        doJobEveryday(job,options)
+    },ONE_DAY * 1000);
 };
 
 
 /**
- * 每天定时任务
- * @param targettime
+ * start the job everyday
+ * @param targettime unit:seconds
  * @param job
+ * @param options
  */
-var startJobEveryDay = function(targettime, job){
+var startJobEveryDay = function(targettime,job,options){
+    //the time to start
     var timegap = targettime - date_util.getNowTimestamp();
     setTimeout(function(){
-        doJobEveryday(job);
-    },timegap);
+        doJobEveryday(job,options);
+    },timegap * 1000);
 };
 
-var startJobEveryTimegap = function(start_timestamp, timegap, job){
+/**
+ * start do the job every time gap
+ * @param start_timestamp first time
+ * @param timegap
+ * @param job
+ * @param options
+ */
+var startJobEveryTimegap = function(start_timestamp,timegap,job,options){
     var timetogo = start_timestamp - date_util.getNowTimestamp();
     setTimeout(function(){
-        doJobBytimegap(job,timegap);
-    },timetogo);
+        doJobBytimegap(job,options,timegap);
+    },timetogo * 1000);
 };
-
 
 module.exports = {
     startJobEveryDay:startJobEveryDay
